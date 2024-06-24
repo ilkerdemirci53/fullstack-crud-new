@@ -44,10 +44,6 @@ const Post = ({ post }) => {
     }
   };
 
-  useEffect(() => {
-    router.refresh();
-  }, [post]);
-
   return (
     <div
       key={post.id}
