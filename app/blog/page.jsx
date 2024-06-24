@@ -12,7 +12,7 @@ const BlogPage = async () => {
         <AddPost />
       </div>
 
-      <PostList posts={posts} />
+      <PostList initialPosts={posts} />
     </div>
   );
 };

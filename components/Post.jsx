@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ButtonWrapper from "./ButtonWrapper";
 import Modal from "./Modal";
 import axios from "axios";
@@ -28,7 +28,7 @@ const Post = ({ post }) => {
     try {
       await axios.patch(`/api/posts/${post.id}`, postToEdit);
       setModal(false);
-      router.refresh();
+      await router.refresh();
     } catch (error) {
       console.log(error);
     }
@@ -38,7 +38,7 @@ const Post = ({ post }) => {
     try {
       await axios.delete(`/api/posts/${post.id}`);
       setOpenModalDelete(false);
-      router.refresh();
+      await router.refresh();
     } catch (error) {
       console.log(error);
     }
@@ -65,13 +65,13 @@ const Post = ({ post }) => {
         </button>
         <Modal modal={modal} setModal={setModal}>
           <form className="w-full" onSubmit={handleEditSubmit}>
-            <h1 className="text-2xl pb-3">Add New Post</h1>
+            <h1 className="text-2xl pb-3">Edit Post</h1>
             <input
               type="text"
               placeholder="Title"
               name="title"
               className="w-full p-4 rounded-md text-black"
-              value={postToEdit.title || ""}
+              value={postToEdit.title}
               onChange={handleChange}
             />
             <input
@@ -79,11 +79,11 @@ const Post = ({ post }) => {
               placeholder="Description"
               name="description"
               className="w-full p-4 rounded-md text-black my-8"
-              value={postToEdit.description || ""}
+              value={postToEdit.description}
               onChange={handleChange}
             />
 
-            <ButtonWrapper type={"submit"}>Submit</ButtonWrapper>
+            <ButtonWrapper type="submit">Submit</ButtonWrapper>
           </form>
         </Modal>
 

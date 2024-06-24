@@ -1,7 +1,20 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Post from "./Post";
 
-const PostList = ({ posts }) => {
+const PostList = ({ initialPosts }) => {
+  const [posts, setPosts] = useState(initialPosts);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await axios.get("/api/posts");
+      setPosts(response.data);
+    };
+
+    fetchPosts();
+  }, []);
+
   return (
     <div className="max-w-full mx-auto grid gap-4">
       {posts.map((post) => (
