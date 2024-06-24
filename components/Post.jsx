@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ButtonWrapper from "./ButtonWrapper";
 import Modal from "./Modal";
 import axios from "axios";
@@ -43,6 +43,10 @@ const Post = ({ post }) => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    router.refresh();
+  }, [post]);
 
   return (
     <div
