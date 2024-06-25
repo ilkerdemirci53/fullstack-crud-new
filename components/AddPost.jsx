@@ -3,38 +3,31 @@ import Modal from "./Modal";
 import ButtonWrapper from "./ButtonWrapper";
 import { useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
-const AddPost = () => {
-  const router = useRouter();
+
+const AddPost = ({ fetchPosts }) => {
   const [modal, setModal] = useState(false);
   const [inputs, setInputs] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post("/api/posts", inputs)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setInputs({});
-        setModal(false);
-        router.refresh();
-      });
+    try {
+      await axios.post("/api/posts", inputs);
+      setInputs({});
+      setModal(false);
+      fetchPosts(); // fetchPosts prop olarak geçildiği yerden çağrılır
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
   };
 
   const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
+    const { name, value } = e.target;
     setInputs((values) => ({ ...values, [name]: value }));
   };
+
   return (
     <div>
       <ButtonWrapper onClick={() => setModal(true)}>Add New Post</ButtonWrapper>
-
       <Modal modal={modal} setModal={setModal}>
         <form className="w-full" onSubmit={handleSubmit}>
           <h1 className="text-2xl pb-3">Add New Post</h1>
@@ -54,8 +47,7 @@ const AddPost = () => {
             value={inputs.description || ""}
             onChange={handleChange}
           />
-
-          <ButtonWrapper type={"submit"}>Submit</ButtonWrapper>
+          <ButtonWrapper type="submit">Submit</ButtonWrapper>
         </form>
       </Modal>
     </div>

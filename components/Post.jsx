@@ -3,16 +3,13 @@ import React, { useState } from "react";
 import ButtonWrapper from "./ButtonWrapper";
 import Modal from "./Modal";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 
-const Post = ({ post }) => {
-  const router = useRouter();
+const Post = ({ post, fetchPosts }) => {
   const [modal, setModal] = useState(false);
   const [postToEdit, setPostToEdit] = useState({
     title: post.title,
     description: post.description,
   });
-
   const [openModalDelete, setOpenModalDelete] = useState(false);
 
   const handleChange = (e) => {
@@ -28,9 +25,9 @@ const Post = ({ post }) => {
     try {
       await axios.patch(`/api/posts/${post.id}`, postToEdit);
       setModal(false);
-      await router.refresh();
+      fetchPosts();
     } catch (error) {
-      console.log(error);
+      console.error("Error updating post:", error);
     }
   };
 
@@ -38,24 +35,20 @@ const Post = ({ post }) => {
     try {
       await axios.delete(`/api/posts/${post.id}`);
       setOpenModalDelete(false);
-      router.refresh();
+      fetchPosts();
     } catch (error) {
-      console.log(error);
+      console.error("Error deleting post:", error);
     }
   };
 
   return (
-    <div
-      key={post.id}
-      className="bg-[#252525] border rounded-lg shadow-md p-4 my-1 flex items-center justify-between"
-    >
+    <div className="bg-[#252525] border rounded-lg shadow-md p-4 my-1 flex items-center justify-between">
       <div>
         <h1 className="text-xl font-bold uppercase md:text-2xl">
           {post.title}
         </h1>
         <p className="mt-2 text-lg font-light md:text-xl">{post.description}</p>
       </div>
-
       <div>
         <button
           onClick={() => setOpenModalDelete(true)}
@@ -82,14 +75,11 @@ const Post = ({ post }) => {
               value={postToEdit.description}
               onChange={handleChange}
             />
-
             <ButtonWrapper type="submit">Submit</ButtonWrapper>
           </form>
         </Modal>
-
         <ButtonWrapper onClick={() => setModal(true)}>Edit</ButtonWrapper>
       </div>
-
       <Modal modal={openModalDelete} setModal={setOpenModalDelete}>
         <div className="flex flex-col w-full items-center justify-center gap-4">
           <h1 className="text-2xl mb-1">Delete Post</h1>
