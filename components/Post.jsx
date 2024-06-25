@@ -38,7 +38,7 @@ const Post = ({ post }) => {
     try {
       await axios.delete(`/api/posts/${post.id}`);
       setOpenModalDelete(false);
-      await router.refresh();
+      router.refresh();
     } catch (error) {
       console.log(error);
     }

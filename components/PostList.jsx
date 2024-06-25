@@ -13,7 +13,7 @@ const PostList = ({ initialPosts }) => {
     };
 
     fetchPosts();
-  }, []);
+  }, [posts]);
 
   return (
     <div className="max-w-full mx-auto grid gap-4">
