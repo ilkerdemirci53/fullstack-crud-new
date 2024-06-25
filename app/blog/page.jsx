@@ -9,7 +9,6 @@ const BlogPage = async () => {
     <div className="max-w-[1440px] mx-auto mt-4 p-4">
       <div className="my-5 flex flex-col gap-4">
         <h1 className="text-3xl font-bold">Todo List Project</h1>
-        {/* AddPost component'ini sadece PostList içinde kullanacağız */}
       </div>
 
       <PostList initialPosts={posts} />
