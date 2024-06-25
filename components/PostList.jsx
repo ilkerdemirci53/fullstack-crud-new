@@ -6,19 +6,27 @@ import AddPost from "./AddPost";
 
 const PostList = ({ initialPosts }) => {
   const [posts, setPosts] = useState(initialPosts);
+  const [loading, setLoading] = useState(true);
 
   const fetchPosts = async () => {
     try {
       const response = await axios.get("/api/posts");
       setPosts(response.data);
+      setLoading(false); // Veriler yüklendiğinde loading durumunu false yapıyoruz
     } catch (error) {
       console.error("Error fetching posts:", error);
+      setLoading(false); // Hata durumunda da loading durumunu false yapıyoruz
     }
   };
 
   useEffect(() => {
     fetchPosts();
   }, []);
+
+  // Veriler yüklenirken bir yükleniyor durumu göstermek
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="max-w-full mx-auto grid gap-4">
